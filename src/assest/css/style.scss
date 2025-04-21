@@ -57,7 +57,11 @@ ul{
 .container{
     max-width: 1540px;
 }
-
+.nav-tabs {
+    .nav-link {
+        color: $primary-black;
+    }
+}
 .btn{
     &.btn-size{
         background-color: rgba($primary-black, 0.03);
@@ -106,22 +110,30 @@ header {
         }
     }
 }
+footer {
+    background-color: $tertiary-color;
+}
 // slide banner
 .section-1 {
     .swiper {
         .swiper-wrapper {
             .swiper-slide {
-                height: 750px;
+                height: auto;
                 .content {
                     width: 100%;
-                    height: 100%;
+                    padding-top: 55%;
                     background-repeat: no-repeat;
                     background-size: cover;
+                    background-position: center;
                 }
             }
         }
     }
+    .spotlight {
+        border-top: 1px solid rgba($primary-white, 0.2);
+    }
 }
+
 // Card sản phẩm 
 .product {
     .card-img {
@@ -141,11 +153,69 @@ header {
         padding: 0;
         a {
             font-size: 1.2em;
+            &:hover {
+                color: $primary-color;
+            }
         }
         .price {
             font-size: 1.2em;
+            padding-bottom: 20px;
             span {
                 color: rgba($primary-black, 0.5);
+            }
+        }
+    }
+}
+// Chi tiết sản phẩm
+.product-detail {
+    .mySwiper {
+        .swiper-slide {
+            height: auto !important;
+        }
+    }
+    .price {
+        font-weight: bold;
+        span {
+            color: rgba($color: $primary-black, $alpha: 0.5);
+        }
+    }
+}
+
+// Đăng nhập admin
+.login {
+    width: 450px;
+}
+
+// 
+.sidebar {
+    ul{
+        li{
+            border-bottom: 1px solid rgba(6, 17, 35, 0.2);
+            margin-bottom: 2px;
+            a{
+                display: block;
+                padding: 10px;
+                color: $primary-black ;
+                &:hover{
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}
+
+// Chân trang
+footer {
+    background-color: $tertiary-color;
+    h3 {
+        font-size: 1.5em;
+    }
+    ul {
+        li {
+            margin-bottom: 10px;
+            a {
+                font-size: 1.0em;
+                color: $primary-white;
             }
         }
     }
