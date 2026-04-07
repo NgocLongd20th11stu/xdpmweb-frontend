@@ -48,7 +48,7 @@ const Create = () => {
                 <div className='row'>
                     <div className='d-flex justify-content-between mt-5 pb-3'>
                         <h4 className='h4 pb-0 mb-0'>Danh mục sản phẩm / Tạo mới</h4>
-                        <Link to="/admin/categories" className='btn btn-primary'>Trở lại</Link>
+                        <Link to="/admin/categories" className='btn btn-primary'>Quay lại</Link>
                     </div>
 
                     <div className='col-md-3'>

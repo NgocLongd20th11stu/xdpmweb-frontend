@@ -108,7 +108,6 @@ const Show = () => {
                                                     <tr>
                                                         <td>{category.id}</td>
                                                         <td>{category.name}</td>
-                                                        <td>TSUN</td>
                                                         <td>
                                                             {
                                                                 category.status == 1 ? 

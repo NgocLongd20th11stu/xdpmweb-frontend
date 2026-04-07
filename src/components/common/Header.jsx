@@ -1,10 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
+import { apiURL } from './http';
 
 
 const Header = () => {
+
+  const [categories,setCategories] = useState([])
+
+
+  const fetchCategories = () => {
+      fetch(`${apiURL}/get-categories`,{
+        method: 'GET',
+        headers: {
+          'Content-type' : 'application/json',
+          'Accept' : 'application/json',
+        }
+      })
+      .then(res => res.json())
+      .then(result => {
+        if(result.status == 200) {
+          setCategories(result.data)
+        } else {
+          console.log("Hệ Thống Bị Lỗi!");
+        }
+        
+      })
+    }
+
+    useEffect(() => {
+      fetchCategories();
+    })
+
   return (
     <header className='shadow'>
       <div className='bg-dark text-center py-3'>
@@ -21,9 +49,13 @@ const Header = () => {
               style={{ maxHeight: '100px' }}
               navbarScroll
             >
-              <Nav.Link href="#action1">Áo thun</Nav.Link>
-              <Nav.Link href="#action2">Quần</Nav.Link>
-              <Nav.Link href="#action2">Áo khoác</Nav.Link>
+              {
+                categories && categories.map(category => {
+                  return (
+                    <Nav.Link href={`/shop?category=${category.id}`}>{category.name}</Nav.Link>
+                  )
+                })
+              }
             </Nav>
 
             <div className='nav-right d-flex'>

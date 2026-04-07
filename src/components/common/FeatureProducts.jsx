@@ -1,47 +1,64 @@
-import React from 'react'
-import ProductImg1 from '../../assest/products/t-shirt/naturalReserve.png';
-import ProductImg2 from '../../assest/products/t-shirt/aothun_OversizedFit.png';
-
+import React, { useEffect, useState } from "react";
+import { apiURL } from "../common/http";
+import { formatVND } from "../../utils/format";
+import { Link } from "react-router-dom";
 
 // Sản phẩm nổi bật
 const FeatureProducts = () => {
-  return (
-    <section className='section-2 py-5'>
-            <div className='container'>
-                <h2>SẢN PHẨM NỔI BẬT</h2>
-                <div className='row mt-4'>
-                    <div className='col-md-3 col-6'>
-                        <div className='product card border-0'>
-                            <div className='card-img'> 
-                                <img src={ProductImg1} alt="" className='w-100'/>
-                            </div>
-                            <div className='card-body pt-3'>
-                                <a href="">Áo thun Natural Reserve</a>
-                                <div className='price'>
-                                    300.000 VND <span className='text-decoration-line-through'>450.000VND</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div className='col-md-3 col-6'>
-                        <div className='product card border-0'>
-                            <div className='card-img'> 
-                                <img src={ProductImg2} alt="" className='w-100'/>
-                            </div>
-                            <div className='card-body pt-3'>
-                                <a href="">Áo thun So Fresh So Clean</a>
-                                <div className='price'>
-                                    250.000 VND <span className='text-decoration-line-through'>450.000VND</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                </div>
-            </div>
-        </section>
-  )
-}
+  const [products, setProducts] = useState([]);
 
-export default FeatureProducts
+  const featuredProducts = async () => {
+    await fetch(apiURL + "/get-featured-products", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setProducts(result.data);
+      });
+  };
+
+  useEffect(() => {
+    featuredProducts();
+  }, []);
+
+  return (
+    <section className="section-2 py-5">
+      <div className="container">
+        <h2>SẢN PHẨM NỔI BẬT</h2>
+        <div className="row mt-4">
+          {products &&
+            products.map((product) => {
+              return (
+                <div className="col-md-3 col-6" key={`product-${product.id}`}>
+                  <div className="product card border-0">
+                    <div className="card-img">
+                      <Link to={`/product/${product.id}`}><img src={product.image_url} alt="" className="w-100" /></Link>
+                    </div>
+                    <div className="card-body pt-3">
+                      <Link to={`/product/${product.id}`}>{product.title}</Link>
+                      <div className="price text-nowrap">
+                        <span className="text-danger fw-bold">
+                          {formatVND(product.price)}
+                        </span>
+                        {product.compare_price && (
+                          <span className="text-decoration-line-through ms-2 text-muted small">
+                            {formatVND(product.compare_price)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FeatureProducts;

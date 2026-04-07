@@ -9,6 +9,9 @@ const Footer = () => {
                         <h4>Nhom 17</h4>
                         <p>Dang Ngoc Long</p>
                         <p >Tran Minh Hieu</p>
+                        <p >Nguyen Dinh Tai</p>
+                        <p>Cao Hoang Phuc</p>
+                        <p>Nguyen Bao Minh</p>
                     </div>
 
                     <div className='col-md-3 pb-4'>
