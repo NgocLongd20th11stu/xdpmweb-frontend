@@ -6,12 +6,12 @@ const Footer = () => {
             <div className='container'>
                 <div className='row'>
                     <div className='col-md-3 pb-4'>
-                        <h4>Nhom 17</h4>
-                        <p>Dang Ngoc Long</p>
-                        <p >Tran Minh Hieu</p>
-                        <p >Nguyen Dinh Tai</p>
-                        <p>Cao Hoang Phuc</p>
-                        <p>Nguyen Bao Minh</p>
+                        <h4>Nhóm 18</h4>
+                        <p>Đặng Ngọc Long</p>
+                        <p >Nguyễn Nhựt Thoại</p>
+                        <p > Nguyễn Tuấn Mẫn</p>
+                        <p>Hồ Tấn Phát</p>
+                        <p>Trần Nguyễn Quốc Huy</p>
                     </div>
 
                     <div className='col-md-3 pb-4'>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Layout from './common/Layout';
 import { Rating } from 'react-simple-star-rating'
 import { Link, useParams } from 'react-router-dom';
@@ -10,14 +10,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import { toast } from 'react-toastify';
 
-
-import ProductImg from '../assest/products/t-shirt/naturalReserve.png';
-import ProductImg1 from '../assest/products/t-shirt/naturalReserve1.png';
-import ProductImg2 from '../assest/products/t-shirt/naturalReserve2.png';
 import { apiURL } from './common/http';
 import { formatVND } from '../utils/format';
-
+import { CartContext } from './context/Cart';
 
 const Product = () => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -25,7 +22,11 @@ const Product = () => {
     const [product, setProduct] = useState([])
     const [productImages, setProductImages] = useState([])
     const [productSizes, setProductSizes] = useState([])
+    const [sizeSelected, setSizeSelected] = useState([null])
     const params = useParams();
+    const {addtoCart} = useContext(CartContext)
+
+
 
     const fetchProduct = () => {
         fetch(`${apiURL}/get-product/${params.id}`,{
@@ -46,6 +47,20 @@ const Product = () => {
           }
           
         })
+    }
+
+    const handleAddToCart = () => {
+        if (productSizes.length>0) {
+            if (sizeSelected == null) {
+                toast.error("Bạn chưa chọn size!");
+            } else {
+                addtoCart(product,sizeSelected)
+                toast.success("Đã thêm vào giỏ hàng");
+            }
+        } else {
+            addtoCart(product,null)
+            toast.success("Đã thêm vào giỏ hàng");
+        }   
     }
 
     useEffect(() => {
@@ -90,7 +105,7 @@ const Product = () => {
                                 {
                                     productImages && productImages.map(product_image => {
                                         return (
-                                            <SwiperSlide >
+                                            <SwiperSlide key={`image-sm-${product_image.id}`}>
                                                 <div className='content'>
                                                     <img 
                                                         src={product_image.image_url} 
@@ -120,7 +135,7 @@ const Product = () => {
                                 {
                                     productImages && productImages.map(product_image => {
                                         return (
-                                            <SwiperSlide >
+                                            <SwiperSlide key={`image-${product_image.id}`} >
                                                 <div className='content'>
                                                     <img 
                                                         src={product_image.image_url} 
@@ -170,7 +185,13 @@ const Product = () => {
                             {
                                 productSizes && productSizes.map(product_size => {
                                     return (
-                                        <button className='btn btn-size ms-1'>{product_size.size.name}</button>
+                                        <button 
+                                            key={`p-size-${product_size.id}`}
+                                            onClick={() => setSizeSelected(product_size.size.name)}
+                                            className={`btn btn-size me-2 ${sizeSelected == product_size.size.name ? 'active' : ''}`}>
+                                                {product_size.size.name}
+
+                                        </button>
                                     )
                                 })
                             }
@@ -179,7 +200,10 @@ const Product = () => {
                     </div>
 
                     <div className='add-to-cart my-4'>
-                        <button className='btn btn-primary text-uppercase '>Thêm giỏ hàng</button>
+                        <button
+                            onClick={() => handleAddToCart()}
+                            className='btn btn-primary text-uppercase '>Thêm giỏ hàng            
+                        </button>
                     </div>
 
                     <div>
