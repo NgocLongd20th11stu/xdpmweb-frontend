@@ -22,13 +22,13 @@ const Sidebar = () => {
                         <Link to="/admin/products">Sản Phẩm</Link>
                     </li>
                     <li>
-                        <a href="">Đơn hàng</a>
+                        <Link to={'/admin/orders'}>Đơn hàng</Link>
                     </li>
                     <li>
-                        <a href="">Tài khoản</a>
+                        <Link to={'/admin/orders'} >Tài khoản</Link>
                     </li>
                     <li>
-                        <a href="">Giao hàng</a>
+                        <Link to={'/admin/orders'} >Giao hàng</Link>
                     </li>
                     <li>
                         <a href="">Thay đổi mật khẩu</a>

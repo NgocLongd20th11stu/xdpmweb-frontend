@@ -23,7 +23,7 @@ const Create = ({ placeholder }) => {
 
   const config = useMemo(
     () => ({
-      readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+      readonly: false, 
       placeholder: placeholder || "",
     }),
     [placeholder],
@@ -117,7 +117,7 @@ const Create = ({ placeholder }) => {
       });
   };
 
-  // Hàm lưu ảnh sản phẩm
+  // Hàm lưu ảnh sản phẩm tạm thời
   const handleFile = async (e) => {
     const formData = new FormData();
     const file = e.target.files[0];
@@ -165,6 +165,8 @@ const Create = ({ placeholder }) => {
               Quay lại
             </Link>
           </div>
+          
+          {/* Sidebar */}
           <div className="col-md-3">
             <Sidebar />
           </div>
@@ -549,6 +551,8 @@ const Create = ({ placeholder }) => {
               </button>
             </form>
           </div>
+
+          
         </div>
       </div>
     </Layout>

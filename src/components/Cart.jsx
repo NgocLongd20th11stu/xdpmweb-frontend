@@ -107,7 +107,7 @@ const Cart = () => {
                             <div>{formatVND(grandTotal())}</div>
                         </div>
                         <div className='d-flex justify-content-end py-3'>
-                            <button className='btn btn-primary'>Đặt hàng</button>
+                            <Link to={`/checkout`} className='btn btn-primary'>Đặt hàng</Link>
                         </div>
                     </div>
                 </div>

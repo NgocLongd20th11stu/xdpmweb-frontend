@@ -1,14 +1,12 @@
-import React, { useContext, useState } from 'react'
-import Layout from '../common/Layout';
+import React from 'react'
+import Layout from './common/Layout'
 import { useForm } from "react-hook-form";
-import { apiURL } from '../common/http';
+import { Link, useNavigate } from 'react-router-dom';
+import { apiURL } from './common/http';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { AdminAuthContext } from '../AdminAuth';
 
-const Login = () => {
-    const {login} = useContext(AdminAuthContext);
 
+const Register = () => {
     const { 
         register, 
         handleSubmit, 
@@ -18,9 +16,9 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const onSubmit = async (data) => {
 
-        const res = await fetch(`${apiURL}/admin/login`, {
+    const onSubmit = async (data) => {
+        const res = await fetch(`${apiURL}/register`, {
             method : 'POST',
             headers: {
                 'Content-type' : 'application/json'
@@ -31,27 +29,43 @@ const Login = () => {
             console.log(result)
 
             if (result.status == 200) {
-                const adminInfo = {
-                    token: result.token,
-                    id: result.id,
-                    name: result.name
-                }
-
-                localStorage.setItem('adminInfo', JSON.stringify(adminInfo))
-                login(adminInfo)
-                navigate('/admin/dashboard')
+                toast.success(result.message)
+                navigate('/account/login')
             } else {
-                toast.error(result.message);
+                //toast.error(result.message);
+                const formErrors = result.errors;
+                Object.keys(formErrors).forEach((field) => {
+                    setError(field, { message: formErrors[field][0] });
+                });
             }
         })
     }
+
+
   return (
     <Layout>
         <div className='container d-flex justify-content-center py-5'>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='card shadow border-0 login'>
                     <div className='card-body p-4'>
-                        <h2>ĐĂNG NHẬP</h2>
+                        <h2 className='border-bottom pb-2 mb-3'>ĐĂNG KÝ TÀI KHOẢN</h2>
+                        <div className='mb-3'>
+                            <label htmlFor="" className='form-label'>Tên đăng nhập:</label>
+                            <input 
+                                {
+                                    ...register('name',{
+                                        required: "Bạn chưa điền tên đăng nhập!",
+                                         
+                                    })
+                                }
+                                type="text" 
+                                className={`form-control ${ errors.name && 'is-invalid'}`} 
+                                placeholder='Tên đăng nhập'/>
+                                {
+                                    errors.name && <p className='invalid-feedback'>{errors.name?.message}</p>
+                                }
+                        </div>
+
                         <div className='mb-3'>
                             <label htmlFor="" className='form-label'>Email:</label>
                             <input 
@@ -88,7 +102,12 @@ const Login = () => {
                             }
                         </div>
 
-                        <button className='btn btn-secondary'>Đăng nhập</button>
+                        <button className='btn btn-secondary w-100'>Đăng ký</button>
+
+                        <div className='d-flex justify-content-center pt-4 pb-2'>
+                            Đã có tài khoản? &nbsp;<Link to='/account/login'>Đăng nhập</Link>
+
+                        </div>
                     </div>
                 </div>
             </form>
@@ -97,4 +116,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register
