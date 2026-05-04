@@ -77,11 +77,14 @@ const Confirmation = () => {
                                         }
 
                                         {
-                                            order.status == 'cancelled' && <span className='badge bg-danger'>Dã hủy</span>
+                                            order.status == 'processing' && <span className='badge bg-primary'>Đang chuẩn bị hàng</span>
                                         }
                                         
                                     </p>
-                                    <p><strong>Hình thức thanh toán: </strong>Thanh toán khi nhận hàng (Cod)</p>
+                                    <p>
+                                        <strong>Hình thức thanh toán: </strong>
+                                        {order.payment_method === 'vnpay' ? 'Thanh toán qua VNPay' : 'Thanh toán khi nhận hàng (COD)'}
+                                    </p>
                                 </div>
 
                                 <div className='col-6'>

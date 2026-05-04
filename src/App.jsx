@@ -31,6 +31,10 @@ import ShowOrders from './components/admin/order/ShowOrders'
 import OrderDetail from './components/admin/order/OrderDetail'
 import MyOrders from './components/front/MyOrders'
 import MyOrderDetail from './components/front/MyOrderDetail'
+import Shipping from './components/admin/shipping/Shipping'
+import VNPayReturn from './components/VNPayReturn'
+import AdminProfile from './components/admin/account/AdminProfile'
+import CustomerList from './components/admin/customer/CustomerList'
 
 function App() {
   
@@ -39,7 +43,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          {/*User Routes  */}
+          {/*===================User Routes=====================*/}
           <Route path='/' element={<Home/>}/>
           <Route path='/shop' element={<Shop/>}/>
           <Route path='/product/:id' element={<Product/>}/>
@@ -66,6 +70,12 @@ function App() {
             </UserRequireAuth>
           }/>
 
+          <Route path='/vnpay-return' element={
+            <UserRequireAuth>
+              <VNPayReturn/>
+            </UserRequireAuth>
+          }/>
+
           <Route path='/order/confirmation/:id' element={
             <UserRequireAuth>
               <Confirmation />
@@ -77,9 +87,11 @@ function App() {
               <MyOrderDetail/>
             </UserRequireAuth>
           }/>
+
+          
           
 
-          {/* Admin Routes */}
+          {/*==============Admin Routes======================*/}
           <Route path='/admin/login' element={<Login/>}/>
           
           <Route path='/admin/dashboard' element={
@@ -158,6 +170,26 @@ function App() {
           <Route path='/admin/orders/:id' element={
             <AdminRequireAuth>
               <OrderDetail/>
+            </AdminRequireAuth>
+          }/>
+
+
+
+          <Route path='/admin/shipping' element={
+            <AdminRequireAuth>
+              <Shipping/>
+            </AdminRequireAuth>
+          }/>
+
+          <Route path='/admin/profile' element={
+            <AdminRequireAuth>
+              <AdminProfile/>
+            </AdminRequireAuth>
+          }/>
+
+          <Route path='/admin/customer' element={
+            <AdminRequireAuth>
+              <CustomerList/>
             </AdminRequireAuth>
           }/>
 

@@ -1,9 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { apiURL, userToken } from "../common/http";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({children}) => {
     const [cartData, setCartData] = useState(JSON.parse(localStorage.getItem('cart')) || [])
+    const [shippingCost, setShippingCost] = useState(0);
 
     const addtoCart = (product, size=null) => {
         let updateCart = [ ...cartData ];
@@ -80,8 +82,15 @@ export const CartProvider = ({children}) => {
 
 
     const shipping = () => {
-            return 0;
+        shippingCost
+        let shippingAmount = 0;
+        if (cartData.length > 0) {
+            shippingAmount = parseFloat(shippingCost); 
+            
         }
+
+        return shippingAmount;
+    }
 
         const subTotal = () => {
             let subTotal = 0;
@@ -119,6 +128,26 @@ export const CartProvider = ({children}) => {
             });
             return quantity;
         }
+
+        useEffect(() => {
+            fetch(`${apiURL}/get-shipping-user`,{
+                method: 'GET',
+                headers: {
+                    'Content-type' : 'application/json',
+                    'Accept' : 'application/json',
+                    'Authorization' : `Bearer ${userToken()}`
+                }
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result.status == 200) {
+                    setShippingCost(result.data.shipping_charge);
+                } else {
+                    setShippingCost(0)
+                    console.log("Hệ thống gặp lỗi!");
+                }                  
+            })
+        });
 
     return (
         <CartContext.Provider value={{addtoCart, cartData, grandTotal, subTotal, shipping, updateCartItem, deleteCartItem, getQuantity}}>

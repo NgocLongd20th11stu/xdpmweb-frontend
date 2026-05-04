@@ -3,7 +3,7 @@ import Layout from '../common/Layout';
 import { useForm } from "react-hook-form";
 import { apiURL } from '../common/http';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AdminAuthContext } from '../AdminAuth';
 
 const Login = () => {
@@ -88,7 +88,10 @@ const Login = () => {
                             }
                         </div>
 
-                        <button className='btn btn-secondary'>Đăng nhập</button>
+                        <button className='btn btn-secondary w-100'>Đăng nhập</button>
+                        <div className='d-flex justify-content-center pt-4 pb-2'>
+                           Khách hàng đăng nhập  &nbsp;<Link to='/account/login'>tại đây</Link>
+                        </div>
                     </div>
                 </div>
             </form>

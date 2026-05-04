@@ -113,7 +113,13 @@ const MyOrderDetail = () => {
                                                 
                                         <div className='col-md-4'>
                                             <div className='text-secondary pt-5'>Hình thức thanh toán</div>
-                                            <p>COD</p>
+                                            <p className="fw-bold">
+                                                {order.payment_method === 'vnpay' ? (
+                                                    <span className="text-primary">Thanh toán qua VNPay</span>
+                                                ) : (
+                                                    <span>Thanh toán khi nhận hàng (COD)</span>
+                                                )}
+                                            </p>
                                         </div>
                                     </div>
 

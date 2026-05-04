@@ -25,18 +25,41 @@ const Checkout = () => {
         register,
         handleSubmit,
         watch,
+        reset,
         setError,
         formState: { errors },
-      } = useForm();
-
-      const processOrder = (data) => {
-        if(paymentMethod == 'cod') {
-            saveOrder(data, 'not paid')
+    } = useForm({
+        defaultValues: async () => {
+            fetch(`${apiURL}/get-profile-details`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${userToken()}`
+                }
+            })
+            .then(res => res.json())
+            .then(result => {
+                reset({
+                    name: result.data.name,
+                    email: result.data.email,
+                    mobile: result.data.mobile,
+                    address: result.data.address,
+                    city: result.data.city,
+                    state: result.data.state,
+                    zip: result.data.zip
+                })
+            })
         }
-      }
+    });
 
-      const saveOrder = (formData, paymentStatus) => {
+    const processOrder = (data) => {
+        // Dù chọn gì cũng gọi saveOrder, chỉ khác nhau cái trạng thái thanh toán ban đầu
+        const status = (paymentMethod === 'vnpay') ? 'not paid' : 'not paid'; 
+        saveOrder(data, status);
+    }
 
+    const saveOrder = (formData, paymentStatus) => {
         const newFormData = {...formData,
                                 grand_total: grandTotal(), 
                                 sub_total: subTotal(), 
@@ -57,14 +80,47 @@ const Checkout = () => {
         })
         .then(res => res.json())
         .then(result => {
-            if(result.status == 200) {
+            if (result.status == 200) {
+                // Xóa giỏ hàng sau khi lưu đơn hàng thành công
                 localStorage.removeItem('cart');
-                navigate(`/order/confirmation/${result.id}`)
+
+                // KIỂM TRA PHƯƠNG THỨC THANH TOÁN TẠI ĐÂY
+                if (paymentMethod === 'vnpay') {
+                    // Nếu là VNPay, gọi hàm lấy link thanh toán (truyền ID vừa tạo và tổng tiền)
+                    getVNPayUrl(result.id, newFormData.grand_total);
+                } else {
+                    // Nếu là COD, điều hướng thẳng đến trang xác nhận như cũ
+                    navigate(`/order/confirmation/${result.id}`);
+                }
             } else {
-                toast.error(result.message)
+                    toast.error(result.message)
             }
         })
-      }
+    }
+
+    const getVNPayUrl = (orderId, amount) => {
+    fetch(`${apiURL}/vnpay-payment`, {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${userToken()}`
+        },
+        body: JSON.stringify({
+            order_id: orderId,
+            amount: amount
+        })
+    })
+    .then(res => res.json())
+    .then(result => {
+        if (result.status === 'success') {
+            // Chuyển hướng sang trang VNPay Sandbox
+            window.location.href = result.data;
+        } else {
+            toast.error("Không thể khởi tạo thanh toán VNPay");
+        }
+    });
+}
 
 
   return (
@@ -171,12 +227,12 @@ const Checkout = () => {
                                             <input
                                             {
                                                 ...register('state',{
-                                                    required : "Chưa nhập quận/huyện!"
+                                                    required : "Chưa nhập tên phường!"
                                                 })
                                             } 
                                             type="text" 
-                                            className={`form-control ${errors.stae && 'is-invalid'}`}  
-                                            placeholder='Quận / Huyện'/>
+                                            className={`form-control ${errors.state && 'is-invalid'}`}  
+                                            placeholder='Phường'/>
                                             {
                                                 errors.state && <p className='invalid-feedback'>{errors.state?.message}</p>
                                             }
@@ -274,8 +330,8 @@ const Checkout = () => {
                             <div className='pt-2'>
                                 <input type="radio"
                                 onClick={handlePaymentMethod} 
-                                defaultChecked={paymentMethod == 'stripe'} value={'stripe'}/>
-                                <label htmlFor="" className='form-label ps-2'>Stripe</label>
+                                defaultChecked={paymentMethod == 'vnpay'} value={'vnpay'}/>
+                                <label htmlFor="" className='form-label ps-2'>VNPay</label>
 
                                 <input type="radio" 
                                 onClick={handlePaymentMethod} 

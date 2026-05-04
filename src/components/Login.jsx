@@ -101,7 +101,9 @@ const Login = () => {
 
                         <div className='d-flex justify-content-center pt-4 pb-2'>
                            Chưa có tài khoản? &nbsp;<Link to='/account/register'>Đăng ký</Link>
-
+                        </div>
+                        <div className='d-flex justify-content-center pt-4 pb-2'>
+                           Admin đăng nhập  &nbsp;<Link to='/admin/login'>tại đây</Link>
                         </div>
                     </div>
                 </div>
